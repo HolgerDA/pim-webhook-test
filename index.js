@@ -6,12 +6,11 @@ app.use(express.json());
 
 // Opret en endpoint, fx /webhook, der modtager POST-anmodninger
 app.post('/webhook', (req, res) => {
-  // Her kan du se, hvad PIM-systemet sender i body:
-  console.log('Modtaget webhook-body:', req.body);
-
-  // Send 200 OK tilbage, så PIM ved, at anmodningen blev modtaget
+  // Log hele payloaden med indrykning, så du ser alle detaljer
+  console.log("Fuld payload modtaget:", JSON.stringify(req.body, null, 2));
   res.status(200).send('OK');
 });
+
 
 // Start serveren
 const PORT = process.env.PORT || 3000;
