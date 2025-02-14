@@ -114,7 +114,7 @@ async function getVariantDataFromPIM(variantId) {
  * 2. Shopify: Opdater Metafield via GraphQL (node-fetch)
  ********************************************************/
 const SHOPIFY_GRAPHQL_URL = 'https://umage-development-b2c.myshopify.com/admin/api/2023-01/graphql.json';
-const ACCESS_TOKEN = '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'; // Erstat med din egen Shopify Access Token
+const ACCESS_TOKEN = process.env.SHOPIFY_ACCESS_TOKEN; // Den ligger i filen env 
 const META_NAMESPACE = 'custom';
 const META_KEY = 'materials';
 
