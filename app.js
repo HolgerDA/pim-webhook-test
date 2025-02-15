@@ -1,11 +1,11 @@
-require('dotenv').config();
 const axios = require('axios');
-// Hvis du bruger Node 18+ er fetch indbygget
-const fetch = global.fetch;
+// Hvis du kører Node 18+, er fetch indbygget
+// Er det ikke tilfældet, skal du evt. importere node-fetch i stedet
+const fetch = global.fetch; // Node 18+
 
-// Hent secrets fra miljøvariablerkk
-const SHOPIFY_ACCESS_TOKEN = process.env.SHOPIFY_ACCESS_TOKEN;
+// Hent secrets fra miljøvariabler (Railway)
 const PIM_API_KEY = process.env.PIM_API_KEY;
+const SHOPIFY_ACCESS_TOKEN = process.env.SHOPIFY_ACCESS_TOKEN;
 
 // URL og konstanter til Shopify
 const SHOPIFY_GRAPHQL_URL = 'https://umage-development-b2c.myshopify.com/admin/api/2023-01/graphql.json';
@@ -19,7 +19,7 @@ function formatMaterialList(materialsArray) {
   if (materialsArray.length === 0) return '';
   if (materialsArray.length === 1) return materialsArray[0];
   if (materialsArray.length === 2) return materialsArray.join(' og ');
-  
+
   const allButLast = materialsArray.slice(0, materialsArray.length - 1).join(', ');
   const last = materialsArray[materialsArray.length - 1];
   return `${allButLast} og ${last}`;
@@ -29,8 +29,9 @@ function formatMaterialList(materialsArray) {
  * 1. Hent data fra PIM via REST (axios)
  ********************************************************/
 async function getVariantDataFromPIM(variantId) {
+  // Byg PIM-url ud fra variantId
   const pimUrl = `https://api.umage.cloud16.structpim.com/variants/${variantId}/attributevalues`;
-  
+
   try {
     const response = await axios.get(pimUrl, {
       headers: {
@@ -76,7 +77,7 @@ async function getVariantDataFromPIM(variantId) {
  ********************************************************/
 async function updateVariantMetafield(shopifyVariantID, materialString) {
   try {
-    // Byg Shopify GID dynamisk
+    // Byg Shopify GID
     const variantGID = `gid://shopify/ProductVariant/${shopifyVariantID}`;
 
     // GraphQL-mutation
@@ -147,7 +148,7 @@ async function main(variantId) {
     // 1) Hent data fra PIM
     const { shopifyVariantID, formattedMaterials } = await getVariantDataFromPIM(variantId);
 
-    // 2) Hvis ShopifyVariantID findes, opdater Shopify-metafield
+    // 2) Opdater Shopify-metafield
     if (!shopifyVariantID) {
       console.error('Fejl: ShopifyVariantID mangler. Kan ikke opdatere metafield.');
       return;
@@ -159,5 +160,5 @@ async function main(variantId) {
   }
 }
 
-// Eksportér main, så vi kan kalde den fra server.js
+// Eksportér main, så den kan kaldes fra server.js
 module.exports = { main };
