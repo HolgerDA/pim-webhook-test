@@ -3,7 +3,7 @@ const axios = require('axios');
 // Hvis du bruger Node 18+ er fetch indbygget
 const fetch = global.fetch;
 
-// Hent secrets fra miljøvariabler
+// Hent secrets fra miljøvariablerkk
 const SHOPIFY_ACCESS_TOKEN = process.env.SHOPIFY_ACCESS_TOKEN;
 const PIM_API_KEY = process.env.PIM_API_KEY;
 
